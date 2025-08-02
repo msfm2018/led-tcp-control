@@ -34,6 +34,7 @@ handle_call(_Request, _From, State) ->
     handle_cast(reset_timeout, State) ->
         logger:info("Resetting timeout for socket: ~p", [State#state.socket]),
         {noreply,  State#state{timeout_count = 0}, ?HEART_BREAK_TIME};
+
     handle_cast(_Request, State) ->
         logger:warning("Unexpected cast: ~p", [_Request]),
         {noreply, State, ?HEART_BREAK_TIME}.
@@ -53,39 +54,71 @@ handle_call(_Request, _From, State) ->
                 {error, Reason} ->
                     {stop, {inet_error, Reason}, State}
             end;
+    % 屏蔽超时
+    % handle_info(timeout, State = #state{socket = Socket, call_back = CB, waiting_first = true}) ->
+    %     CB(Socket, {timeout, first_data}),
 
-    handle_info(timeout, S = #state{socket = Sock, call_back = CB, waiting_first = true}) ->
-        CB(Sock, {timeout, first_data}),
-        {stop, {tcp_closed, Sock}, S};
+    %     {stop, {tcp_closed, Socket}, State};
     
-    handle_info(timeout, S = #state{socket = Sock, call_back = CB, waiting_first = false, timeout_count = Count}) ->
-            NewCount = Count + 1,
-            if
-                NewCount >= 3 -> % 連續3次超時後關閉
-                    CB(Sock, {timeout, heartbeat}),
-                    {stop, {timeout, heartbeat}, S};
-                true ->
-                    CB(Sock, {timeout, heartbeat}),
-                    {noreply, S#state{timeout_count = NewCount}, ?HEART_BREAK_TIME}
-            end;
+    % handle_info(timeout, S = #state{socket = Sock, call_back = CB, waiting_first = false, timeout_count = Count}) ->
+    %         NewCount = Count + 1,
+    %         if
+    %             NewCount >= 3 -> % 連續3次超時後關閉
+    %                 CB(Sock, {timeout, heartbeat}),
+    %                 {stop, {timeout, heartbeat}, S};
+    %             true ->
+    %                 CB(Sock, {timeout, heartbeat}),
+    %                 {noreply, S#state{timeout_count = NewCount}, ?HEART_BREAK_TIME}
+    %         end;
 
-    
-    handle_info({tcp_closed, Socket}, State) ->
-        {stop, {tcp_closed, Socket}, State};
+    handle_info({tcp_closed, _Socket}, State) ->
+    %% 正常关闭，停止进程
+    {stop, normal, State};
+
+   
     
     handle_info(_Any, State) ->
-        logger:warning("Unexpected message: ~p, State: ~p", [_Any, State]),
+        % io:format("Unexpected message: ~p, State: ~p", [_Any, State]),
         {noreply, State, ?HEART_BREAK_TIME}.
 
 
+        terminate(Reason, #state{socket = Socket, call_back = _CallBack, waiting_first = true}) ->
+
+        delete_socket_from_map(Socket),
+
+            case Reason of
+                {tcp_closed, Socket} ->
+                    %% 是首次数据未到超时，跳过回调
+                    io:format("First data timeout, skip terminate callback for socket ~p", [Socket]);
+                _ ->
+                    %% 其他原因可选是否回调（这里为了安全保守跳过）
+                io:format("Waiting_first=true but unexpected reason: ~p", [Reason])
+            end,
+            
+            catch    gen_tcp:send(Socket, <<"timeouterror">>),
+            catch gen_tcp:close(Socket),
+            ok;
+        
+
 terminate(Reason, #state{socket=Socket, call_back = CallBack}) ->
-    logger:info("Terminating with reason: ~p, Socket: ~p", [Reason, Socket]),
+    delete_socket_from_map(Socket),
+
     try CallBack(Socket, {terminate, Reason})
     catch
-        Type:Error -> logger:error("Callback error in terminate: ~p:~p", [Type, Error])
+        Type:Error ->   io:format("Callback error in terminate: ~p:~p~n", [Type, Error])
     end,
     catch gen_tcp:close(Socket),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
+
+    delete_socket_from_map(Socket) ->
+        case [Id || {Id, Sock} <- ets:tab2list(socket_map), Sock == Socket] of
+            [FoundId] ->
+                io:format("database delete id ~p~n",[FoundId]),
+                ets:delete(socket_map, FoundId);
+            _ ->
+                io:format("database not foundid id ~n"),
+                ok
+        end.

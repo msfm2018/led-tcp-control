@@ -20,63 +20,75 @@ format_current_datetime() ->
 
 
 
-log_peer_info(Socket, _) ->
-    case inet:peername(Socket) of
-        {ok, {Ip, Port}} ->
-            IpStr = inet:ntoa(Ip),
-            DateTimeStr = format_current_datetime(),
-            logger:info("~s - IP: ~s, Port: ~w", [DateTimeStr, IpStr, Port]);
-        {error, Reason} ->
-            logger:warning("Failed to get peername for socket ~p: ~p", [Socket, Reason])
-    end.
+
 
 loop(_Socket, {connected, PeerIp, PeerPort}) -> 
     logger:info("Connected: ~p:~p", [PeerIp, PeerPort]),
     io:format("~p~n",[ { PeerIp, PeerPort}]),
     ok;
-
 loop(Socket, {terminate, Reason}) ->
-
-    % 移除对应 ID
-    case [Id || {Id, Sock} <- ets:tab2list(socket_map), Sock == Socket] of
-        [FoundId] ->
-            io:format("database delete id ~p~n",[FoundId]),
-            ets:delete(socket_map, FoundId);
-        _ ->  io:format("database not foundid id "), ok
+    case inet:peername(Socket) of
+        {ok, {Ip, Port}} ->
+            DateTimeStr = format_current_datetime(),
+            IpStr = inet:ntoa(Ip),
+            LogMsg = io_lib:format("~s - IP: ~s, Port: ~w, Terminate Reason: ~p", 
+                                   [DateTimeStr, IpStr, Port, Reason]),
+            io:format("~s~n", [LogMsg]);
+        {error, einval} ->
+                io:format("Socket invalid when terminating: ~p~n", [Reason]);
+        {error, Other} ->
+                io:format("Unknown error in peername: ~p~n", [Other])
     end,
+    ok;
+% loop(Socket, {terminate, Reason}) ->
+%     {ok, {Ip, Port}} = inet:peername(Socket),
+%     {{Year, Month, Day}, {Hour, Minute, Second}} = calendar:local_time(),
+%     DateTimeStr = io_lib:format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", 
+%                                 [Year, Month, Day, Hour, Minute, Second]),
+%     IpStr = inet:ntoa(Ip), % 將 IP 元組轉為字符串
+%     LogMsg = io_lib:format("~s - IP: ~s, Port: ~w, Terminate Reason: ~p", 
+%                            [DateTimeStr, IpStr, Port, Reason]),
+%     io:format("~s~n", [LogMsg]),
 
-    {ok, {Ip, Port}} = inet:peername(Socket),
-    {{Year, Month, Day}, {Hour, Minute, Second}} = calendar:local_time(),
-    DateTimeStr = io_lib:format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", 
-                                [Year, Month, Day, Hour, Minute, Second]),
-    IpStr = inet:ntoa(Ip), % 將 IP 元組轉為字符串
-    LogMsg = io_lib:format("~s - IP: ~s, Port: ~w, Terminate Reason: ~p", 
-                           [DateTimeStr, IpStr, Port, Reason]),
-    io:format("~s~n", [LogMsg]),
+  
+%             % % 尝试从 socket_map 找到对应 ID 并删除
+%             % case [Id || {Id, Sock} <- ets:tab2list(socket_map), Sock == Socket] of
+%             %     [FoundId] ->
+%             %         io:format("database delete id ~p~n",[FoundId]),
+%             %         ets:delete(socket_map, FoundId);
+%             %     _ ->  
+%             %         io:format("database not foundid id ~n"), 
+%             %         ok
+%             % end,
 
-  ok;
+%   ok;
 
 loop(_Socket, <<>>) ->
     % 忽略空数据，通常是 TCP 流的末尾或不完整的数据包
   ok;
 
 loop(Socket,  {timeout, first_data}) ->
-  io:format("First data timeout stop  ~n"),
-  log_peer_info(Socket, "First data timeout"),
-  logger:info("Initial data timeout for socket ~p. Closing connection.", [Socket]),
-  % 这里的逻辑由 client_handle 处理关闭，所以这里只做日志
+  io:format("Initial data timeout for socket ~p. Closing connection.~n", [Socket]),
   ok;
 
-loop(Socket, {timeout, heartbeat}) ->
-    {ok, {Ip, Port}} = inet:peername(Socket),
-    IpStr = inet:ntoa(Ip),
-    DateTimeStr = format_current_datetime(),
-    LogMsg = io_lib:format("~s - IP: ~s, Port: ~w, Heartbeat Timeout",
-                           [DateTimeStr, IpStr, Port]),
-    logger:info("~s", [LogMsg]),
 
-    io:format("~s~n", [LogMsg]),
-    ok;
+loop(Socket, {timeout, heartbeat}) ->
+    case inet:peername(Socket) of
+        {ok, {Ip, Port}} ->
+            IpStr = inet:ntoa(Ip),
+            DateTimeStr = format_current_datetime(),
+            LogMsg = io_lib:format("~s - IP: ~s, Port: ~w, Heartbeat Timeout ~n",
+                                   [DateTimeStr, IpStr, Port]),
+            io:format("~s~n", [LogMsg]),
+            ok;
+        {error, Reason} ->
+            DateTimeStr = format_current_datetime(),
+            LogMsg = io_lib:format("~s - Unknown peer (heartbeat timeout), reason: ~p~n",
+                                   [DateTimeStr, Reason]),
+            io:format("~s~n", [LogMsg]),
+            ok
+    end;
+
 
 
   loop(Socket, Data) when is_binary(Data)->
@@ -86,7 +98,6 @@ loop(Socket, {timeout, heartbeat}) ->
             fun(Line) ->
                 case Line of
                     <<>> ->
-                        % 空行在 split 后可能出现，通常忽略
                         ok;
                     _ ->
                         process_line(Socket, Line)
@@ -97,7 +108,6 @@ loop(Socket, {timeout, heartbeat}) ->
         ok
     catch
         _ ->
-          % //  io:format("数据处理错误: ~p, 堆栈: ~p~n", [Reason, Stacktrace]),
             receive_data(Socket, <<"raw">>, Data)
     end;
 
@@ -134,7 +144,10 @@ process_line(Socket, Line) ->
                 %% ---------- JSON 解析失败 ----------
                 {error, Reason} ->
                     io:format("JSON decode error: ~p~n", [Reason]),
-                    receive_data(Socket, <<"raw">>, Line)
+                    receive_data(Socket, <<"raw">>, Line);
+                _ ->
+                    io:format("Unrecognized payload~n")
+                    % {noreply, State}
             end
         %   end
           catch
@@ -154,20 +167,12 @@ handle_other(_Socket, Type, Map) ->
 %%% 具体数据处理
 %%%-----------------------------------------------------------------
 receive_data(Socket, <<"0x00">>, #{<<"id">> := Id, <<"token">> := _Token}) ->
-    io:format("login..........~p~n",[Id]),
 
-            case ets:lookup(socket_map, Id) of
-                [{Id, OldSocket}] when OldSocket =/= Socket ->
-                    io:format("Replacing old socket for ID ~p~n", [Id]),
-                    catch gen_tcp:close(OldSocket); % 或设置超时
-                _ -> ok
-            end,
+   
             ets:insert(socket_map, {Id, Socket}),
             gen_tcp:send(Socket, <<"oklogin\r\n">>),
-            io:format("Device login successful: ID=~p", [Id]),
-
-            % ok;
-        gen_server:cast(self(), reset_timeout); 
+            gen_server:cast(self(), reset_timeout),
+            io:format("Device login successful: ID=~p ~p ~n", [Id,Socket]); 
 
 
 
@@ -175,24 +180,20 @@ receive_data(_Socket, <<"0x01">>,
     #{<<"id">> := Id,
       <<"temperature">> := T,
       <<"humidity">> := H}) ->
-    io:format("温湿度: ID=~p, T=~p, H=~p~n", [Id, T, H]),
-    New = #{id => Id, temperature => T, humidity => H},
-    ets:insert(sensor_latest, {Id, New}),      %% 覆盖旧值
-    % Response = <<"Data processed successfully">>,
-    % gen_tcp:send(Socket, Response),
-    gen_server:cast(self(), reset_timeout); 
+
+          io:format("温湿度: ID=~p, T=~p, H=~p~n", [Id, T, H]),
+          New = #{id => Id, temperature => T, humidity => H},
+          ets:insert(sensor_latest, {Id, New}),
+          gen_server:cast(self(), reset_timeout);
+          
+
+
+
+
 
 receive_data(Socket, <<"0x07">>, #{<<"id">> := _Id}) ->
     
-    % {ok, {Ip, Port}} = inet:peername(Socket),
-    % {{Year, Month, Day}, {Hour, Minute, Second}} = calendar:local_time(),
-    % DateTimeStr = io_lib:format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", 
-    %                             [Year, Month, Day, Hour, Minute, Second]),
-    % IpStr = inet:ntoa(Ip), % 將 IP 元組轉為字符串
-    % LogMsg = io_lib:format("~s - ID: ~p  IP: ~s, Port: ~w", [DateTimeStr,Id, IpStr, Port]),
-    % io:format("~s~n", [LogMsg]),
     gen_tcp:send(Socket, <<"{\"type\":\"ack\"}\r\n">>),
-    % gen_tcp:send(Socket, <<"0x07-ack\r\n">>),
     gen_server:cast(self(), reset_timeout),
     ok;
 
