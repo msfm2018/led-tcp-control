@@ -1,0 +1,32 @@
+<all>
+	<module erlname="proto_player" modname="mod_player" modid="1">
+
+
+		
+		<proto protoid="1" protoname="mod_player_login_c2s" type="0">
+			<value type="uint32" name="id" desc="编码"/>
+			<value type="string" name="token" desc="token"/>
+		</proto>
+		<proto protoid="1" protoname="mod_player_login_s2c" type="1">
+		</proto>
+		
+		<proto protoid="2" protoname="mod_device_data_c2s" type="0">
+			<value type="uint32" name="id" desc="编码"/>
+			<value type="string" name="temperature" desc="温度"/>
+			<value type="string" name="humidity" desc="湿度"/>
+		</proto>
+		<proto protoid="2" protoname="mod_device_data_s2c" type="1">
+		</proto>
+	
+		<!-- 错误码　-->
+		<proto protoid="254" protoname="mod_player_errno_s2c" type="1">
+			<value type="uint16" name="error_id" desc="错误码"/>
+		</proto>
+		<!-- 心跳 -->
+		<proto protoid="255" protoname="mod_player_herat_c2s" type="0">
+		</proto>
+	</module>
+
+
+</all>
+

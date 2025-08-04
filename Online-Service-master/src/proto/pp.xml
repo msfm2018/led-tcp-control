@@ -1,0 +1,156 @@
+<all>
+	<module erlname="proto_login" modname="mod_login" modid="1">
+		<!-- login_service返回可连接的gateway_router -->
+		<proto protoid="1" protoname="mod_login_server_c2s" type="0">
+		</proto>
+		<proto protoid="1" protoname="mod_login_server_s2c" type="1">
+			<value type="string" name="ip" desc="ip"/>
+			<value type="uint16" name="port" desc="端口"/>
+		</proto>
+
+		<!-- logic_service_gateway_router返回可连接的gateway -->
+		<proto protoid="2" protoname="mod_login_ask_gateway_c2s" type="0">
+		</proto>
+		<proto protoid="2" protoname="mod_login_ask_gateway_s2c" type="1">
+			<value type="string" name="ip" desc="ip"/>
+			<value type="uint16" name="port" desc="端口"/>
+			<value type="uint32" name="time" desc="时间戳"/>
+			<value type="bytes" name="verification" desc="验证key"/>
+		</proto>
+
+		<!-- 校验 与gateway的tcp连接建立后第一步 -->
+		<proto protoid="3" protoname="mod_login_verification_c2s" type="0">
+			<value type="string" name="accname" desc="账号"/>
+			<value type="string" name="password" desc="密码"/>
+			<value type="uint32" name="time" desc="时间戳"/>
+			<value type="bytes" name="verification" desc="验证"/>
+		</proto>
+		<proto protoid="3" protoname="mod_login_verification_s2c" type="1">
+		</proto>
+
+		<!-- 注册 -->
+		<proto protoid="4" protoname="mod_login_register_c2s" type="0">
+			<value type="string" name="accname" desc="账号名"/>
+			<value type="string" name="password" desc="密码"/>
+			<value type="uint32" name="time" desc="时间戳"/>
+			<value type="bytes" name="verification" desc="验证"/>
+		</proto>
+		<proto protoid="4" protoname="mod_login_register_s2c" type="1">
+		</proto>
+	</module>
+
+	<module erlname="proto_player" modname="mod_player" modid="2">
+		<!-- 心跳　-->
+		<proto protoid="254" protoname="mod_player_heart_break_c2s" type="0">
+		</proto>
+		<!-- 错误码　-->
+		<proto protoid="255" protoname="mod_player_error_s2c" type="1">
+            <value type="uint16" name="error_id" desc="错误码"/>
+        </proto>
+	</module>
+
+
+
+	<module erlname="proto_service" modname="mod_service" modid="3">
+		<proto protoid="1" protoname="mod_service_login_c2s" type="0">
+			<value type="uint16" name="service_id" desc="登录某个service服务"/>
+		</proto>
+		<proto protoid="1" protoname="mod_service_login_s2c" type="1">
+			<value type="uint16" name="service_id" desc="service标示"/>
+		</proto>
+
+		<proto protoid="2" protoname="mod_service_content_c2s" type="0">
+			<value type="uint16" name="service_id" desc="协议中转层根据这个id找需要中转到的与对应服务器集群之间的连接"/>
+			<value type="bytes" name="content" desc="消息体"/>
+		</proto>
+		<proto protoid="2" protoname="mod_service_content_s2c" type="1">
+			<value type="uint16" name="service_id" desc="service标示"/>
+			<value type="bytes" name="content" desc="消息体"/>
+		</proto>
+	</module>
+
+
+	<!-- ********************************************** 场景功能服务 **********************************************************-->
+	<module erlname="proto_scene" modname="mod_scene" modid="4">
+		<!--用户登录场景成功  返回用户相关数据以及同屏表信息  当登录成功过后   会将用户和周围同屏表的数据也一起发过来-->
+		<proto protoid="1" protoname="mod_scene_new_player_s2c" type="1">
+			<loop name="mod_scene_new_player_s2c_player_list">
+				<value type="string" name="accname" desc="用户名"/>
+				<value type="uint32" name="job" desc="职业"/>
+				<value type="uint32" name="x" desc="坐标x"/>
+				<value type="uint32" name="y" desc="坐标y"/>
+				<value type="uint32" name="weapon" desc="武器"/>
+			</loop>
+			<value type="loop" looptype="mod_scene_new_player_s2c_player_list" name="player_list" desc="用户列表"/>
+		</proto>
+		<!--通知客户端删除用户-->
+		<proto protoid="2" protoname="mod_scene_del_player_s2c" type="1">
+			<loop name="mod_scene_del_player_s2c_player_list">
+				<value type="string" name="accname" desc="用户名"/>
+			</loop>
+			<value type="loop" looptype="mod_scene_del_player_s2c_player_list" name="player_list" desc="需要删除的用户列表"/>
+		</proto>
+		<!--用户移动-->
+		<proto protoid="3" protoname="mod_scene_move_xy_c2s" type="0">
+			<value type="uint32" name="rx" desc="原x坐标"/>
+			<value type="uint32" name="ry" desc="原y左边"/>
+			<value type="uint32" name="dx" desc="目标x坐标"/>
+			<value type="uint32" name="dy" desc="目标y左边"/>
+		</proto>
+		<proto protoid="3" protoname="mod_scene_move_xy_s2c" type="1">
+			<value type="string" name="accname" desc="用户名"/>
+			<value type="uint32" name="rx" desc="原先坐标"/>
+			<value type="uint32" name="ry" desc="原y坐标"/>
+			<value type="uint32" name="dx" desc="目标x坐标"/>
+			<value type="uint32" name="dy" desc="目标y坐标"/>
+		</proto>
+		<!--跳跃-->
+		<proto protoid="4" protoname="mod_scene_jump_c2s" type="0">
+			<value type="string" name="accname" desc="用户名"/>
+		</proto>
+		<proto protoid="4" protoname="mod_scene_jump_s2c" type="1">
+			<value type="string" name="accname" desc="用户名"/>
+		</proto>
+	</module>
+
+	<module erlname="proto_chat" modname="mod_chat" modid="5">
+		<!--同屏范围聊天-->
+		<proto protoid="1" protoname="mod_chat_c2s" type="0">
+			<value type="uint8" name="type" desc="类型 0为同屏 1为场景 2为全世界"/>
+			<value type="string" name="words" desc="说的话"/>
+		</proto>
+
+		<proto protoid="1" protoname="mod_chat_s2c" type="1">
+			<value type="string" name="accname" desc="用户名"/>
+			<value type="string" name="words" desc="说的话"/>
+		</proto>
+	</module>
+
+	<module erlname="proto_goods" modname="mod_goods" modid="6">
+		<!--换武器 测试版本简单的更换就好-->
+		<proto protoid="1" protoname="mod_goods_change_weapon_c2s" type="0">
+			<value type="uint32" name="weapon_id" desc="更换的武器id"/>
+		</proto>
+		<proto protoid="1" protoname="mod_goods_change_weapon_s2c" type="1">
+			<value type="string" name="accname" desc="用户名"/>
+			<value type="uint32" name="weapon_id" desc="武器id"/>
+		</proto>
+	</module>
+
+	<module erlname="proto_battle" modname="mod_battle" modid="7">
+		<proto protoid="1" protoname="mod_battle_attack_c2s" type="0">
+			<value type="string" name="srcAccname" desc="攻击者"/>
+			<value type="string" name="desAccname" desc="被攻击者"/>
+			<value type="uint32" name="skill" desc="技能"/>
+		</proto>
+		<proto protoid="1" protoname="mod_battle_attack_s2c" type="1">
+			<value type="string" name="srcAccname" desc="攻击者"/>
+			<value type="string" name="desAccname" desc="被攻击者"/>
+			<value type="uint32" name="skill" desc="技能"/>
+		</proto>
+	</module>
+	<!-- ********************************************** 场景功能服务 end **********************************************************-->
+	<!-- 集群之间tcp通讯协议 用原生的 term_to_binary 如果怀疑效率存在问题  可测试直接构造二进制来对比对比-->
+
+</all>
+

@@ -17,8 +17,8 @@ start(Option, Socket) ->
     gen_server:start(?MODULE, [Option, Socket], []).
 
 init([#t_tcp_sup_options{call_back = CallBack}, Socket]) ->
-  {ok, {PeerIp, PeerPort}} = inet:peername(Socket),
-  _ = try CallBack(Socket, {connected, PeerIp, PeerPort})
+%   {ok, {PeerIp, PeerPort}} = inet:peername(Socket),
+  _ = try CallBack(Socket, {connected})
       catch _:_ -> ok
       end,
 

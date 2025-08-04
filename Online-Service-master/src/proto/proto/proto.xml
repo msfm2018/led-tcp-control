@@ -1,0 +1,769 @@
+<all>
+	<module erlname="proto_player" modname="mod_player" modid="1">
+
+		<proto protoid="0" protoname="mod_player_ask_gateway_c2s" type="0">
+		</proto>
+		<proto protoid="0" protoname="mod_player_ask_gateway_s2c" type="1">
+			<value type="string" name="ip" desc="IP地址"/>
+			<value type="int32" name="port" desc="端口号"/>
+		</proto>
+		
+		<proto protoid="1" protoname="mod_player_login_c2s" type="0">
+			<value type="string" name="id" desc="账号"/>
+			<value type="string" name="pwd" desc="密码"/>
+			<value type="int32" name="x" desc="纬度"/>
+			<value type="int32" name="y" desc="经度"/>
+		</proto>
+		<proto protoid="1" protoname="mod_player_login_s2c" type="1">
+		</proto>
+		
+		<proto protoid="2" protoname="mod_player_regist_c2s" type="0">
+			<value type="string" name="id" desc="账号"/>
+			<value type="string" name="name" desc="名字"/>
+			<value type="string" name="pwd" desc="密码"/>
+			<value type="uint32" name="camp_id" desc="最小的阵营id"/>
+		</proto>
+		<proto protoid="2" protoname="mod_player_regist_s2c" type="1">
+			
+		</proto>
+		
+		<proto protoid="3" protoname="mod_player_setgps_c2s" type="0">
+			<value type="int32" name="x" desc="纬度"/>
+			<value type="int32" name="y" desc="经度"/>
+		</proto>
+		
+		<proto protoid="4" protoname="mod_player_setuserdata_c2s" type="0">
+			<value type="uint32" name="citycode" desc="城市代码"/>
+			<value type="string" name="cityname" desc="城市名字"/>
+			<value type="string" name="address" desc="地址"/>
+		</proto>
+		
+		<proto protoid="5" protoname="mod_player_alluser_c2s" type="0">
+		</proto>
+		
+		<proto protoid="5" protoname="mod_player_alluser_s2c" type="1">
+			<loop name="mod_player_alluser_s2c_list">
+				<value type="string" name="id" desc="账号" />
+				<value type="string" name="name" desc="姓名"/>
+				<value type="int32" name="x" desc="纬度"/>
+				<value type="int32" name="y" desc="经度"/>
+				<value type="uint32" name="citycode" desc="城市代码"/>
+				<value type="string" name="cityname" desc="城市名字"/>
+				<value type="string" name="address" desc="地址"/>
+			</loop>
+			<value type="loop" looptype="mod_player_alluser_s2c_list" name="user_list" desc="用户列表"/>
+		</proto>
+
+		<proto protoid="6" protoname="mod_player_ask_self_data_c2s" type="0">
+		</proto>
+
+		<proto protoid="6" protoname="mod_player_ask_self_data_s2c" type="1">
+			<value type="string" name="id" desc="账号" />
+			<value type="string" name="name" desc="姓名"/>
+			<value type="int32" name="x" desc="纬度"/>
+			<value type="int32" name="y" desc="经度"/>
+			<value type="uint32" name="citycode" desc="城市代码"/>
+			<value type="string" name="cityname" desc="城市名字"/>
+			<value type="string" name="address" desc="地址"/>
+			<value type="uint64" name="mileage" desc="里程数"/>
+			<value type="uint32" name="lv" desc="等级"/>
+			<value type="uint64" name="exp" desc="经验"/>
+			<value type="uint64" name="coin" desc="钱"/>
+			<value type="string" name="sign" desc="签名信息"/>
+			<value type="uint32" name="pet1" desc="宠物栏1"/>
+			<value type="uint32" name="pet2" desc="宠物栏2"/>
+			<value type="uint32" name="pet3" desc="宠物栏3"/>
+			<value type="uint32" name="pet4" desc="宠物栏4"/>
+			<value type="uint32" name="pet5" desc="宠物栏5"/>
+			<value type="uint32" name="pet6" desc="宠物栏6"/>
+			<value type="uint32" name="feature_id" desc="剧情事件id"/>
+			<value type="uint32" name="camp_id" desc="阵营id"/>
+		</proto>
+
+		<proto protoid="7" protoname="mod_player_sync_time_c2s" type="0">
+		</proto>
+		<proto protoid="7" protoname="mod_player_sync_time_s2c" type="1">
+			<value type="uint32" name="time" desc="同步的时间"/>
+		</proto>
+
+        <proto protoid="8" protoname="mod_player_sync_coin_s2c" type="1">
+            <value type="uint32" name="coin" desc="钱"/>
+        </proto>
+
+		<proto protoid="9" protoname="mod_player_min_camp_id_s2c" type="1">
+			<value type="uint32" name="camp_id" desc="最小的阵营id"/>
+		</proto>
+		<proto protoid="10" protoname="mod_player_attrlist_c2s" type="0" desc="玩家属性列表">
+		</proto>
+		<proto protoid="10" protoname="mod_player_attrlist_s2c" type="1" desc="玩家属性列表">
+			<loop name="mod_player_attrlist_s2c_list">
+				<value type="int32" name="type" desc="类型"/>
+				<value type="int32" name="num" desc="值"/>
+			</loop>
+			<value type="loop" looptype="mod_player_attrlist_s2c_list" name="attr_list" desc="玩家属性列表"/>
+		</proto>
+		<!-- 错误码　-->
+		<proto protoid="254" protoname="mod_player_errno_s2c" type="1">
+			<value type="uint16" name="error_id" desc="错误码"/>
+		</proto>
+		<!-- 心跳 -->
+		<proto protoid="255" protoname="mod_player_herat_c2s" type="0">
+		</proto>
+	</module>
+
+	<module erlname="proto_event" modname="mod_event" modid="2">
+		<proto protoid="1" protoname="mod_event_eventlist_c2s" type="0" desc="客户端要局部事件">
+		</proto>
+		<proto protoid="1" protoname="mod_event_eventlist_s2c" type="1" desc="事件列表">
+			<loop name="mod_event_eventlist_s2c_event_conditions">
+				<value type="uint8" name="k" desc="完成条件类型"/>
+				<value type="int32" name="v" desc="完成条件值"/>
+			</loop>
+			<loop name="mod_event_eventlist_s2c_event_award">
+				<value type="uint32" name="time" desc="时间段"/>
+				<value type="uint32" name="drop_id" desc="掉落组id"/>
+			</loop>
+			<loop name="mod_event_eventlist_s2c_event_award1">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="数量"/>
+			</loop>
+			<loop name="mod_event_eventlist_s2c_list">
+				<value type="string" name="key" desc="事件key值"/>
+				<value type="uint64" name="id" desc="事件Id"/>
+				<value type="string" name="name" desc="事件名称"/>
+				<value type="int32" name="type" desc="事件类型"/>
+				<value type="string" name="desc" desc="描述文本"/>
+				<value type="int32" name="x" desc="纬度"/>
+				<value type="int32" name="y" desc="经度"/>
+				<value type="uint8" name="area" desc="范围"/>
+				<value type="int64" name="start_time" desc="起始时间"/>
+				<value type="int64" name="end_time" desc="结束时间"/>
+				<value type="int32" name="participate_num" desc="参与的最小人数"/>
+				<value type="loop" looptype="mod_event_eventlist_s2c_event_conditions" name="conditions" desc="完成条件"/>
+				<value type="loop" looptype="mod_event_eventlist_s2c_event_award" name="award" desc="持续奖励掉落组"/>
+				<value type="loop" looptype="mod_event_eventlist_s2c_event_award1" name="award1" desc="固定奖励物品列表"/>
+				<value type="int32" name="state" desc="事件的状态（剧情事件（0，未完成。1，已完成） 集体事件的循环事件（0,非占领2,争夺，3,已占领））"/>
+				<value type="int32" name="camp" desc="占领后的阵营id"/>
+				<value type="int32" name="player_camp" desc="自己参加事件选择的阵营"/>
+				<value type="int32" name="player_score" desc="自己参加事件的积分"/>
+				<value type="int32" name="limit_player_max_num" desc="事件参与人数限制的最大值"/>
+				<value type="int32" name="limit_event_max_times" desc="事件参与次数的最大值"/>
+				<value type="int32" name="limit_player_also_num" desc="事件还可参与的人数"/>
+				<value type="int32" name="limit_event_also_times" desc="事件还可以参与的次数"/>
+				<value type="int32" name="wave_number_standard" desc="事件小游戏为摇数字的基准值"/>
+			</loop>
+			<value type="loop" looptype="mod_event_eventlist_s2c_list" name="event_list" desc="事件列表"/>
+		</proto>
+		<proto protoid="2" protoname="mod_event_worldeventlist_c2s" type="0" desc="客户端上线获取日常事件">
+		</proto>
+		<proto protoid="3" protoname="mod_event_joinevent_c2s" type="0">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="3" protoname="mod_event_joinevent_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="int32" name="game_type" desc="事件小游戏类型"/>
+			<value type="uint16" name="error_id" desc="参与事件结果值 0为成功"/>
+		</proto>
+		<proto protoid="4" protoname="mod_event_exitevent_c2s" type="0">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="4" protoname="mod_event_exitevent_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="5" protoname="mod_event_completeevent_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="6" protoname="mod_event_received_event_list_c2s" type="0" desc="上线后在发送主动发送这个">
+		</proto>
+		<proto protoid="6" protoname="mod_event_received_event_list_s2c" type="1" desc="先是打包正在做的事件列表信息返回mod_event_eventlist_s2c， 然后返回的此条消息是正在做的事件">
+			<loop name="mod_event_received_event_list_s2c_list">
+				<value type="string" name="key" desc="事件key值"/>
+			</loop>
+			<value type="loop" looptype="mod_event_received_event_list_s2c_list" name="event_list" desc="已接事件列表"/>
+		</proto>
+		<proto protoid="8" protoname="mod_event_received_event_over_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="9" protoname="mod_event_pet_joinevent_c2s" type="0" desc="宠物到达后，点击按钮开始事件，返回mod_event_joinevent_s2c">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="10" protoname="mod_event_return_pet_c2s" type="0" desc="玩家要求返回驻守在事件处的所有宠物">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="11" protoname="mod_event_award_info_s2c" type="1" desc="持续性地通知用户某个事件获取的收益以及宠物属性变化">
+			<loop name="mod_event_award_info_s2c_goods_list">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="数量"/>
+			</loop>
+            <loop name="mod_event_award_info_s2c_pet_list">
+                <value type="uint32" name="pet_goods_id" desc="物品id"/>
+                <value type="loop" looptype="mod_event_award_info_s2c_hurt_list" name="list" desc="持续性地通知宠物受到的伤害"/>
+            </loop>
+            <loop name="mod_event_award_info_s2c_hurt_list">
+                <value type="uint8" name="attack_type" desc="攻击类型"/>
+                <value type="uint16" name="attack_count" desc="攻击次数"/>
+                <value type="uint32" name="hurt" desc="受到的攻击伤害"/>
+            </loop>
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="loop" looptype="mod_event_award_info_s2c_goods_list" name="list" desc="持续性地通知用户当前事件得到的奖励"/>
+            <value type="loop" looptype="mod_event_award_info_s2c_pet_list" name="pet_hurt_list" desc="持续性地通知宠物受到的伤害"/>
+		</proto>
+		<proto protoid="12" protoname="mod_event_all_award_s2c" type="1" desc="一次性地通知用户某个事件获取的收益">
+			<loop name="mod_event_all_award_s2c_goods_list">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="数量"/>
+			</loop>
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="loop" looptype="mod_event_all_award_s2c_goods_list" name="list" desc="一次性地通知用户某个事件获取的收益"/>
+		</proto>
+		<proto protoid="13" protoname="mod_event_set_normal_xy_c2s" type="0" desc="客户端主动设置日常事件的坐标">
+			<loop name="mod_event_set_normal_xy_c2s_list">
+				<value type="string" name="key" desc="事件key值"/>
+				<value type="int32" name="x" desc="坐标x"/>
+				<value type="int32" name="y" desc="坐标y"/>
+			</loop>
+			<value type="loop" looptype="mod_event_set_normal_xy_c2s_list" name="list" desc="事件列表"/>
+		</proto>
+		<proto protoid="14" protoname="mod_event_dispear_s2c" type="1" desc="事件消失">
+			<loop name="mod_event_dispear_s2c_list">
+				<value type="string" name="key" desc="事件key值"/>
+			</loop>
+			<value type="loop" looptype="mod_event_dispear_s2c_list" name="list" desc="消失的事件列表"/>
+		</proto>
+		<proto protoid="15" protoname="mod_event_world_not_normal_id_list_c2s" type="0" desc="获取世界性的非日常事件id列表">
+
+		</proto>
+		<proto protoid="15" protoname="mod_event_world_not_normal_id_list_s2c" type="1" desc="获取世界性的非日常事件id列表">
+			<loop name="mod_event_world_not_normal_id_list_s2c_list">
+				<value type="uint64" name="id" desc="事件Id"/>
+			</loop>
+			<value type="loop" looptype="mod_event_world_not_normal_id_list_s2c_list" name="id_list" desc="事件id列表"/>
+		</proto>
+		<proto protoid="16" protoname="mod_event_ask_world_not_normal_list_c2s" type="0" desc="客户端发送需要的事件列表id，服务器以mod_event_eventlist_s2c消息返回对应id列表的事件信息">
+			<loop name="mod_event_ask_world_not_normal_list_c2s_list">
+				<value type="uint64" name="id" desc="事件Id"/>
+			</loop>
+			<value type="loop" looptype="mod_event_ask_world_not_normal_list_c2s_list" name="id_list" desc="事件id列表"/>
+		</proto>
+		<proto protoid="17" protoname="mod_event_featureeventlist_c2s" type="0" desc="客户端上线获取剧情事件">
+		</proto>
+		<proto protoid="18" protoname="mod_event_set_feature_xy_c2s" type="0" desc="客户端主动设置剧情事件的坐标">
+			<loop name="mod_event_set_feature_xy_c2s_list">
+				<value type="string" name="key" desc="事件key值"/>
+				<value type="int32" name="x" desc="坐标x"/>
+				<value type="int32" name="y" desc="坐标y"/>
+			</loop>
+			<value type="loop" looptype="mod_event_set_feature_xy_c2s_list" name="list" desc="事件列表"/>
+		</proto>
+		<proto protoid="19" protoname="mod_part_event_eventlist_c2s" type="0" desc="客户端获取视野内的事件,每隔一段时间定时请求（现在是30s）">
+			<value type="uint64" name="player_x" desc="玩家坐标x"/>
+			<value type="uint64" name="player_y" desc="玩家坐标y"/>
+		</proto>
+		<proto protoid="20" protoname="mod_part_event_ranklist_c2s" type="0" desc="获取视野范围内指定事件的排行榜">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="21" protoname="mod_part_event_ranklist_s2c" type="1" desc="获取视野范围内指定事件的排行榜">
+			<loop name="mod_part_event_sumscorelist_s2c_list">
+				<value type="int32" name="campid" desc="阵营id"/>
+				<value type="int32" name="scores" desc="阵营总分数"/>
+			</loop>
+				<value type="string" name="key" desc="事件key值"/>
+				<value type="string" name="playerid" desc="玩家id"/>
+				<value type="uint32" name="eventscore" desc="个人积分"/>
+				<value type="uint32" name="playercamp" desc="事件个人选择的阵营"/>
+			<loop name="mod_part_event_ranklist_s2c_list">
+				<value type="string" name="playerid" desc="玩家id"/>
+				<value type="string" name="playerName" desc="玩家名字"/>
+				<value type="uint64" name="playerScore" desc="玩家积分"/>
+				<value type="uint32" name="playercamp" desc="事件个人选择的阵营"/>
+			</loop>
+			<value type="loop" looptype="mod_part_event_ranklist_s2c_list" name="rank" desc="指定事件的排行榜"/>
+			<value type="loop" looptype="mod_part_event_sumscorelist_s2c_list" name="scorelist" desc="个阵营积分榜"/>
+		</proto>
+		<proto protoid="21" protoname="mod_event_small_event_score_c2s" type="0" desc="客户端玩小游戏的积分">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint64" name="playerscore" desc="玩家玩小游戏本次的积分"/>
+		</proto>
+		<proto protoid="22" protoname="mod_feature_id_c2s" type="0" desc="cToS 剧情事件id">
+			<value type="uint32" name="feature_id" desc="剧情事件id"/>
+		</proto>
+		<proto protoid="22" protoname="mod_feature_id_s2c" type="1" desc="sToc 剧情事件id">
+			<value type="uint32" name="feature_id" desc="剧情事件id"/>
+		</proto>
+		<proto protoid="23" protoname="mod_set_camp_evet_c2s" type="0" desc="cTos 设置阵营id">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint32" name="campid" desc="玩家选择的阵营的id"/>
+		</proto>
+		<proto protoid="23" protoname="mod_set_camp_evet_s2c" type="1" desc="sToc 返回设置阵营id">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint32" name="campid" desc="玩家选择的阵营的id"/>
+		</proto>
+		<proto protoid="24" protoname="mod_event_limit_info_c2s" type="0">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="24" protoname="mod_event_limit_info_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="int32" name="limit_player_max_num" desc="事件参加人数限制的最大值"/>
+			<value type="int32" name="limit_player_also_num" desc="事件参加人数限制的剩余值"/>
+			<value type="int32" name="limit_event_max_times" desc="事件参加次数限制的最大值"/>
+			<value type="int32" name="limit_event_also_times" desc="事件参加次数限制的剩余值"/>
+		</proto>
+		<proto protoid="25" protoname="mod_event_request_quest_c2s" type="0">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="int32" name="quest_id" desc="正在做的题目id,0代表没有答题结束。发送结算消息"/>
+			<value type="int32" name="quest_num" desc="正在做事件，共答题数目"/>
+		</proto>
+		<proto protoid="25" protoname="mod_event_request_quest_s2c" type="1">
+			<value type="int32" name="quest_id" desc="即将做的题目id"/>
+			<value type="string" name="describe" desc="即将做的题目描述"/>
+			<value type="string" name="answer1" desc="即将做的题目选项1"/>
+			<value type="string" name="answer2" desc="即将做的题目选项2"/>
+			<value type="string" name="answer3" desc="即将做的题目选项3"/>
+			<loop name="mod_event_quest_right_answer_list">
+				<value type="int32" name="right_answer" desc="即将做的题目正确答案"/>
+			</loop>
+			<value type="loop" looptype="mod_event_quest_right_answer_list" name="right_answer_list" desc="答案列表"/>
+		</proto>
+		<proto protoid="26" protoname="mod_event_request_redpacket_c2s" type="0">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="26" protoname="mod_event_request_redpacket_s2c" type="1">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="int32" name="score" desc="分数"/>
+		</proto>
+		<proto protoid="27" protoname="mod_event_petfondventlist_c2s" type="0" desc="宠物获取事件">
+			<value type="uint64" name="pet_x" desc="宠物坐标x"/>
+			<value type="uint64" name="pet_y" desc="宠物坐标y"/>
+		</proto>
+		<proto protoid="28" protoname="mod_event_featurevent_review_list_c2s" type="0" desc="剧情事件回顾列表">
+		</proto>
+		<proto protoid="28" protoname="mod_event_featurevent_review_list_s2c" type="1" desc="剧情事件回顾列表">
+			<loop name="mod_event_revieweventlist_conditions">
+				<value type="uint8" name="k" desc="完成条件类型"/>
+				<value type="int32" name="v" desc="完成条件值"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_award">
+				<value type="uint32" name="time" desc="时间段"/>
+				<value type="uint32" name="drop_id" desc="掉落组id"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_award1">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="数量"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_s2c_event_conditions">
+				<value type="uint8" name="k" desc="完成条件类型"/>
+				<value type="int32" name="v" desc="完成条件值"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_s2c_event_award">
+				<value type="uint32" name="time" desc="时间段"/>
+				<value type="uint32" name="drop_id" desc="掉落组id"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_s2c_event_award1">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="数量"/>
+			</loop>
+			<loop name="mod_event_revieweventlist_s2c_list">
+				<value type="string" name="key" desc="事件key值"/>
+				<value type="uint64" name="id" desc="事件Id"/>
+				<value type="string" name="name" desc="事件名称"/>
+				<value type="int32" name="type" desc="事件类型"/>
+				<value type="string" name="desc" desc="描述文本"/>
+				<value type="int32" name="x" desc="纬度"/>
+				<value type="int32" name="y" desc="经度"/>
+				<value type="uint8" name="area" desc="范围"/>
+				<value type="int64" name="start_time" desc="起始时间"/>
+				<value type="int64" name="end_time" desc="结束时间"/>
+				<value type="int32" name="participate_num" desc="参与的最小人数"/>
+				<value type="loop" looptype="mod_event_revieweventlist_s2c_event_conditions" name="conditions" desc="完成条件"/>
+				<value type="loop" looptype="mod_event_revieweventlist_s2c_event_award" name="award" desc="持续奖励掉落组"/>
+				<value type="loop" looptype="mod_event_revieweventlist_s2c_event_award1" name="award1" desc="固定奖励物品列表"/>
+				<value type="int32" name="state" desc="事件的状态（剧情事件（0，未完成。1，已完成） 集体事件的循环事件（0,非占领2,争夺，3,已占领））"/>
+				<value type="int32" name="camp" desc="占领后的阵营id"/>
+				<value type="int32" name="player_camp" desc="自己参加事件选择的阵营"/>
+				<value type="int32" name="player_score" desc="自己参加事件的积分"/>
+				<value type="int32" name="limit_player_max_num" desc="事件参与人数限制的最大值"/>
+				<value type="int32" name="limit_event_max_times" desc="事件参与次数的最大值"/>
+				<value type="int32" name="limit_player_also_num" desc="事件还可参与的人数"/>
+				<value type="int32" name="limit_event_also_times" desc="事件还可以参与的次数"/>
+				<value type="int32" name="wave_number_standard" desc="事件小游戏为摇数字的基准值"/>
+			</loop>
+			<value type="loop" looptype="mod_event_revieweventlist_s2c_list" name="event_list" desc="事件列表"/>
+		</proto>
+		<proto protoid="29" protoname="mod_event_small_featurereviewevent_score_c2s" type="0" desc="剧情回顾玩小游戏的积分">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint64" name="playerscore" desc="玩家玩小游戏本次的积分"/>
+		</proto>
+		<proto protoid="29" protoname="mod_event_small_featurereviewevent_score_s2c" type="1" desc="剧情回顾玩小游戏的积分">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint64" name="playerscore" desc="玩家玩小游戏本次的积分"/>
+		</proto>
+		<proto protoid="30" protoname="mod_event_sign_on_info_c2s" type="0" desc="获取签到类型事件的积分详情">
+			<value type="string" name="key" desc="事件key值"/>
+		</proto>
+		<proto protoid="30" protoname="mod_event_sign_on_info_s2x" type="1" desc="获取签到类型事件的积分详情">
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint64" name="selfscore" desc="玩家玩小游戏的积分"/>
+			<value type="uint64" name="totalscore" desc="所支持阵营的总分"/>
+			<value type="uint64" name="totalplayernum" desc="所支持阵营的人数"/>
+		</proto>
+		<proto protoid="31" protoname="mod_event_slidemap_fondventlist_c2s" type="0" desc="宠物获取事件">
+			<value type="uint64" name="focus_x" desc="焦点坐标x"/>
+			<value type="uint64" name="focus_y" desc="焦点坐标y"/>
+		</proto>
+	</module>
+	<module erlname="proto_goods" modname="mod_goods" modid="3">
+		<proto protoid="0" protoname="mod_goods_allgoodslist_c2s" type="0" desc="要全部物品列表">
+		</proto>
+		<proto protoid="0" protoname="mod_goods_allgoodslist_s2c" type="1">
+			<loop name="mod_goods_allgoodslist_s2c_list">
+				<value type="uint32" name="id" desc="物品id"/>
+				<value type="uint32" name="template" desc="物品模板id"/>
+                <value type="uint32" name="num" desc="堆叠数"/>
+				<value type="uint32" name="equipped_id" desc="装备的id或者被装备的id"/>
+			</loop>
+			<value type="loop" looptype="mod_goods_allgoodslist_s2c_list" name="goods_list" desc="物品列表"/>
+		</proto>
+		<proto protoid="1" protoname="mod_goods_goods_detail_c2s" type="0" desc="要单个物品信息">
+			<value type="uint32" name="id" desc="物品id"/>
+		</proto>
+		<proto protoid="1" protoname="mod_goods_goods_detail_s2c" type="1">
+			<loop name="mod_goods_goods_detail_s2c_attribute">
+				<value type="uint8" name="key1" desc="大类属性键值"/>
+				<value type="uint8" name="key2" desc="小类属性键值"/>
+				<value type="uint32" name="value" desc="属性值"/>
+			</loop>
+			<value type="uint32" name="id" desc="物品id"/>
+			<value type="uint32" name="template" desc="物品模板id"/>
+			<value type="uint32" name="get_time" desc="获取时间戳"/>
+			<value type="uint32" name="num" desc="堆叠数"/>
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="uint32" name="dispatch_time" desc="派遣到达目的地点的时间戳"/>
+			<value type="loop" looptype="mod_goods_goods_detail_s2c_attribute" name="attributes_list" desc="物品列表"/>
+		</proto>
+		<proto protoid="2" protoname="mod_goods_delete_c2s" type="0" desc="删除某物品">
+			<value type="uint32" name="id" desc="物品id"/>
+		</proto>
+		<proto protoid="2" protoname="mod_goods_delete_s2c" type="1">
+			<value type="uint32" name="id" desc="物品id"/>
+		</proto>
+		<proto protoid="3" protoname="mod_goods_add_s2c" type="1" desc="通知客户端获得了某物品">
+			<value type="uint32" name="id" desc="物品id"/>
+			<value type="uint32" name="template" desc="物品模板id"/>
+		</proto>
+		<proto protoid="4" protoname="mod_goods_produce_c2s" type="0" desc="根据图纸合成">
+			<value type="uint32" name="sheet_id" desc="图纸模板id"/>
+		</proto>
+		<proto protoid="4" protoname="mod_goods_produce_s2c" type="1" desc="根据图纸合成">
+			<value type="uint8" name="error_id" desc="合成成功后返回0"/>
+		</proto>
+		<proto protoid="5" protoname="mod_goods_produce_pet_c2s" type="0" desc="合成宠物">
+			<value type="uint8" name="style" desc="4代表要合成的机械类型，5代表要合成的是生物类型"/>
+			<value type="uint32" name="id1" desc="物品id"/>
+			<value type="uint32" name="id2" desc="物品id"/>
+			<value type="uint32" name="id3" desc="物品id"/>
+			<value type="uint32" name="id4" desc="物品id"/>
+			<value type="uint32" name="id5" desc="物品id"/>
+		</proto>
+		<proto protoid="5" protoname="mod_goods_produce_pet_s2c" type="1" desc="合成宠物">
+			<value type="uint8" name="error_id" desc="合成成功后返回0"/>
+		</proto>
+		<proto protoid="6" protoname="mod_goods_dispatch_pet_c2s" type="0" desc="派遣宠物做事件">
+			<loop name="mod_goods_dispatch_pet_c2s_pet_pos_list">
+				<value type="uint8" name="pet" desc="宠物栏位 1-6"/>
+			</loop>
+			<value type="string" name="key" desc="事件key值"/>
+			<value type="int32" name="x" desc="纬度"/>
+			<value type="int32" name="y" desc="经度"/>
+			<value type="uint32" name="time" desc="时间，如果是0的话，那么就应该服务器算(即对应任务类型是局部的)，否则就以客户端的发送为准"/>
+			<value type="loop" looptype="mod_goods_dispatch_pet_c2s_pet_pos_list" name="pet_pos_list" desc="宠物位置列表"/>
+		</proto>
+		<proto protoid="7" protoname="mod_goods_pet_up_c2s" type="0" desc="宠物上阵或者下阵(当goods_id为0时代表下阵)">
+			<value type="uint8" name="pet" desc="宠物栏位 1-6 1英雄位置，2宠物位置，3 英雄身上的宠物位置"/>
+			<value type="uint32" name="goods_id1" desc="宠物物品id1"/>
+			<value type="uint32" name="goods_id2" desc="宠物物品id2,(英雄装备,卸下宠物，才会给此字段赋值，其他时候传0)"/>
+		</proto>
+		<proto protoid="7" protoname="mod_goods_pet_up_s2c" type="1" desc="宠物上阵或者下阵(当goods_id为0时代表下阵)">
+			<value type="uint8" name="pet" desc="宠物栏位 1-6"/>
+			<value type="uint32" name="goods_id1" desc="宠物物品id2"/>
+			<value type="uint32" name="goods_id2" desc="宠物物品id2,(英雄装备,卸下宠物，才会给此字段赋值，其他时候传0)"/>
+		</proto>
+		<proto protoid="8" protoname="mod_goods_undispatch_pet_c2s" type="0" desc="点小头像收回派遣出去了的宠物">
+			<value type="uint8" name="pet" desc="宠物栏位 1-6"/>
+		</proto>
+        <proto protoid="9" protoname="mod_goods_attribute_change_s2c" type="1" desc="物品属性变化">
+            <loop name="mod_goods_attribute_change_s2c_list">
+                <value type="uint32" name="goods_id" desc="物品id"/>
+                <value type="loop" looptype="mod_goods_attribute_change_s2c_attribute_list" name="attributes_list" desc="属性变化列表"/>
+            </loop>
+            <loop name="mod_goods_attribute_change_s2c_attribute_list">
+                <value type="uint8" name="key" desc="属性键值"/>
+                <value type="uint32" name="value" desc="属性值"/>
+            </loop>
+            <value type="loop" looptype="mod_goods_attribute_change_s2c_list" name="list" desc="属性变化列表"/>
+        </proto>
+        <proto protoid="10" protoname="mod_goods_use_c2s" type="0" desc="使用道具">
+            <value type="uint32" name="goods_id" desc="物品id"/>
+        </proto>
+        <proto protoid="11" protoname="mod_goods_produce_sheet_c2s" type="0" desc="要可合成的图纸模板id列表">
+        </proto>
+        <proto protoid="11" protoname="mod_goods_produce_sheet_s2c" type="1" desc="返回可合成的图纸模板id列表">
+            <loop name="mod_goods_produce_sheet_s2c_list">
+                <value type="uint32" name="goods_template_id" desc="模板id"/>
+            </loop>
+            <value type="loop" looptype="mod_goods_produce_sheet_s2c_list" name="list" desc="模板id列表"/>
+        </proto>
+	</module>
+
+	<module erlname="proto_chat" modname="mod_chat" modid="4">
+		<proto protoid="0" protoname="mod_chat_zone_c2s" type="0" desc="聊天">
+			<value type="uint8" name="type" desc="类型 1为局部，2为节点，3为世界"/>
+			<value type="string" name="words" desc="话"/>
+		</proto>
+		<proto protoid="0" protoname="mod_chat_zone_s2c" type="1">
+			<value type="uint8" name="type" desc="类型 1为局部，2为节点，3为世界"/>
+			<value type="string" name="player_id" desc="用户id"/>
+			<value type="string" name="nick_name" desc="昵称"/>
+			<value type="string" name="words" desc="话"/>
+		</proto>
+		<proto protoid="1" protoname="mod_chat_person_c2s" type="0" desc="聊天">
+			<value type="string" name="player_id" desc="用户id"/>
+			<value type="string" name="words" desc="话"/>
+		</proto>
+		<proto protoid="1" protoname="mod_chat_person_s2c" type="1">
+			<value type="string" name="player_id" desc="用户id"/>
+			<value type="string" name="nick_name" desc="昵称"/>
+			<value type="string" name="words" desc="话"/>
+		</proto>
+		<proto protoid="2" protoname="mod_chat_person_offline_s2c" type="1">
+			<value type="string" name="player_id" desc="用户id"/>
+		</proto>
+
+		<proto protoid="255" protoname="mod_chat_gm_command_c2s" type="0" desc="gm指令">
+			<value type="string" name="words" desc="话"/>
+		</proto>
+	</module>
+
+	<module erlname="proto_task" modname="mod_task" modid="5">
+		<proto protoid="0" protoname="mod_task_get_list_c2s" type="0" desc="上线后获取当前任务列表">
+		</proto>
+		<proto protoid="0" protoname="mod_task_get_list_s2c" type="1">
+			<loop name="mod_task_get_list_s2c_list">
+				<value type="uint32" name="id" desc="任务id"/>
+			</loop>
+			<value type="loop" looptype="mod_task_get_list_s2c_list" name="id_list" desc="当前任务id列表"/>
+		</proto>
+		<proto protoid="1" protoname="mod_task_compelte_task_c2s" type="0" desc="完成某个任务">
+			<value type="uint32" name="id" desc="任务id"/>
+		</proto>
+		<proto protoid="1" protoname="mod_task_compelte_task_s2c" type="1">
+			<value type="uint32" name="id" desc="任务id"/>
+		</proto>
+	</module>
+
+	<module erlname="proto_email" modname="mod_email" modid="6">
+		<proto protoid="0" protoname="mod_email_id_list_c2s" type="0" desc="获取email的id列表">
+			<value type="uint8" name="type" desc="0获取系统邮件id列表 1获取个人收件箱邮件列表"/>
+		</proto>
+		<proto protoid="0" protoname="mod_email_id_list_sc2" type="1">
+			<loop name="mod_email_id_list_sc2_list">
+				<value type="uint32" name="id" desc="邮件id"/>
+			</loop>
+			<value type="uint8" name="type" desc="0系统邮件 1个人收件箱邮件"/>
+			<value type="loop" looptype="mod_email_id_list_sc2_list" name="id_list" desc="邮件id列表"/>
+		</proto>
+		<proto protoid="1" protoname="mod_email_title_list_c2s" type="0" desc="获取对应邮件标签要显示的内容">
+			<loop name="mod_email_title_list_c2s_list">
+				<value type="uint32" name="id" desc="邮件id"/>
+			</loop>
+			<value type="loop" looptype="mod_email_title_list_c2s_list" name="id_list" desc="邮件id列表"/>
+		</proto>
+		<proto protoid="1" protoname="mod_email_title_list_s2c" type="1" desc="获取对应邮件标签要显示的内容">
+			<loop name="mod_email_title_list_s2c_list">
+				<value type="uint32" name="id" desc="邮件id"/>
+				<value type="string" name="sender_name" desc="邮件id"/>
+				<value type="uint8" name="type" desc="0为系统 1为个人"/>
+				<value type="uint8" name="read_flag" desc="0未读 1已读"/>
+				<value type="uint8" name="goods_flag" desc="0无附件 1有附件"/>
+				<value type="uint32" name="send_time" desc="邮件产生时间戳"/>
+				<value type="string" name="title" desc="邮件标题"/>
+			</loop>
+			<value type="loop" looptype="mod_email_title_list_s2c_list" name="id_list" desc="邮件标签内容列表"/>
+		</proto>
+		<proto protoid="2" protoname="mod_email_detail_c2s" type="0" desc="获取对应邮件详细信息">
+			<value type="uint32" name="id" desc="邮件id"/>
+		</proto>
+		<proto protoid="2" protoname="mod_email_detail_s2c" type="1" desc="获取对应邮件标签要显示的内容">
+			<loop name="mod_email_detail_s2c_goods_list">
+				<value type="uint32" name="template" desc="物品模板id"/>
+				<value type="uint32" name="num" desc="物品数量"/>
+			</loop>
+			<value type="uint32" name="id" desc="邮件id"/>
+			<value type="string" name="sender_id" desc="发件者id"/>
+			<value type="string" name="content" desc="邮件正文"/>
+			<value type="loop" looptype="mod_email_detail_s2c_goods_list" name="goods_list" desc="邮件附件物品信息"/>
+		</proto>
+		<proto protoid="3" protoname="mod_email_delete_c2s" type="0" desc="删除某邮件">
+			<value type="uint32" name="id" desc="邮件id"/>
+		</proto>
+		<proto protoid="3" protoname="mod_email_delete_s2c" type="1" desc="删除某邮件">
+			<value type="uint32" name="id" desc="邮件id"/>
+		</proto>
+		<proto protoid="4" protoname="mod_email_delete_all_c2s" type="0" desc="一键删除某邮件">
+			<value type="uint8" name="type" desc="一键删除0系统邮件 1个人邮件"/>
+			<value type="uint8" name="status" desc="0代表客户端提出要删除  但是不确定有无附件需要服务器来做判断 1代表做完了判断之后直接删除"/>
+		</proto>
+		<proto protoid="4" protoname="mod_email_delete_all_s2c" type="1" desc="一键删除某邮件 返回信息">
+			<value type="uint8" name="type" desc="0系统 1个人"/>
+			<value type="uint8" name="status" desc="0删除成功 1有物品需要等待客户端确认发送删除"/>
+		</proto>
+		<proto protoid="5" protoname="mod_email_get_goods_c2s" type="0" desc="获取某邮件的附件">
+			<value type="uint32" name="id" desc="邮件id"/>
+		</proto>
+		<proto protoid="5" protoname="mod_email_get_goods_s2c" type="1" desc="获取某邮件的附件">
+			<value type="uint32" name="id" desc="邮件id"/>
+		</proto>
+		<proto protoid="6" protoname="mod_email_get_goods_all_c2s" type="0" desc="一键领取">
+		</proto>
+		<proto protoid="6" protoname="mod_email_get_goods_all_s2c" type="1" desc="一键领取">
+		</proto>
+	</module>
+
+    <module erlname="proto_auction" modname="mod_auction" modid="7">
+        <proto protoid="0" protoname="mod_auction_get_auction_id_list_c2s" type="0" desc="获取可访问拍卖行id列表">
+        </proto>
+        <proto protoid="0" protoname="mod_auction_get_auction_id_list_s2c" type="1">
+            <loop name="mod_auction_get_auction_id_list_s2c_list">
+                <value type="uint32" name="id" desc="拍卖行id"/>
+            </loop>
+            <value type="uint32" name="default_id" desc="默认拍卖行id 0代表没有"/>
+            <value type="loop" looptype="mod_auction_get_auction_id_list_s2c_list" name="auction_id_list" desc="其余拍卖行id列表"/>
+        </proto>
+
+        <proto protoid="1" protoname="mod_auction_get_auction_page_c2s" type="0" desc="访问拍卖行某页信息">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint32" name="page" desc="第几页"/>
+            <value type="uint32" name="time" desc="上一次时间戳，如果没有缓存，0"/>
+        </proto>
+        <proto protoid="1" protoname="mod_auction_get_auction_page_s2c" type="1">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint32" name="page" desc="第几页"/>
+            <value type="uint32" name="time" desc="上一次更新的时间戳"/>
+            <value type="uint32" name="all_page_count" desc="总页数"/>
+
+            <loop name="mod_auction_get_auction_page_s2c_list">
+                <value type="uint32" name="template_id" desc="道具模板id"/>
+                <value type="uint32" name="min_price" desc="最低价"/>
+                <value type="uint32" name="all_count" desc="总数量"/>
+            </loop>
+            <value type="loop" looptype="mod_auction_get_auction_page_s2c_list" name="list" desc="显示数据列表"/>
+        </proto>
+        <proto protoid="2" protoname="mod_auction_get_template_page_c2s" type="0" desc="要某拍卖行的某种道具的页面信息">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint32" name="template_id" desc="道具模板id"/>
+            <value type="uint32" name="time" desc="上一次更新时间戳"/>
+        </proto>
+        <proto protoid="2" protoname="mod_auction_get_template_page_s2c" type="1" desc="返回某拍卖行的某种道具的页面信息">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint32" name="time" desc="更新时间戳"/>
+            <value type="uint32" name="template_id" desc="道具模板id"/>
+
+            <loop name="mod_auction_get_template_page_s2c_list">
+                <value type="uint64" name="record_id" desc="拍卖单号id"/>
+                <value type="uint32" name="price" desc="价格"/>
+                <value type="uint32" name="count" desc="数量"/>
+            </loop>
+            <value type="loop" looptype="mod_auction_get_template_page_s2c_list" name="list" desc="显示数据列表"/>
+        </proto>
+
+        <proto protoid="3" protoname="mod_auction_get_record_detail_c2s" type="0" desc="要拍卖单号物品的详细信息，不可堆叠物品才有此详情">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint64" name="record_id" desc="拍卖单号id"/>
+            <value type="uint32" name="template_id" desc="道具模板id"/>
+        </proto>
+        <proto protoid="3" protoname="mod_auction_get_record_detail_s2c" type="1" desc="返回某拍卖行的某订单号的物品的详情">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint64" name="record_id" desc="拍卖单号id"/>
+            <value type="uint32" name="template_id" desc="道具模板id"/>
+
+            <loop name="mod_auction_get_record_detail_s2c_attribute_list">
+                <value type="uint8" name="key" desc="属性键值"/>
+                <value type="uint32" name="value" desc="属性值"/>
+            </loop>
+            <value type="loop" looptype="mod_auction_get_record_detail_s2c_attribute_list" name="list" desc="物品属性列表"/>
+        </proto>
+
+        <proto protoid="4" protoname="mod_auction_sell_c2s" type="0" desc="出售某道具">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint32" name="goods_id" desc="物品id"/>
+            <value type="uint32" name="num" desc="售出的数量"/>
+            <value type="uint32" name="price" desc="价格"/>
+            <value type="uint32" name="time" desc="出售持续时间"/>
+        </proto>
+        <proto protoid="4" protoname="mod_auction_sell_s2c" type="1" desc="出售某道具结果">
+            <value type="uint8" name="result" desc="0成功1失败"/>
+        </proto>
+
+        <proto protoid="5" protoname="mod_auction_cancel_sell_c2s" type="0" desc="取消某拍卖">
+            <value type="uint32" name="id" desc="拍卖行id"/>
+            <value type="uint64" name="record_id" desc="拍卖单号id"/>
+        </proto>
+        <proto protoid="5" protoname="mod_auction_cancel_sell_s2c" type="1" desc="某拍卖取消">
+            <loop name="mod_auction_cancel_sell_s2c_list">
+                <value type="uint32" name="id" desc="拍卖行id"/>
+                <value type="uint64" name="record_id" desc="拍卖单号id"/>
+            </loop>
+            <value type="loop" looptype="mod_auction_cancel_sell_s2c_list" name="list" desc="取消了的单号id"/>
+        </proto>
+
+        <proto protoid="6" protoname="mod_auction_self_record_c2s" type="0" desc="要自己拍卖的列表">
+        </proto>
+        <proto protoid="6" protoname="mod_auction_self_record_s2c" type="1" desc="返回自己拍卖的列表">
+            <loop name="mod_auction_self_record_s2c_list">
+                <value type="uint32" name="auction_id" desc="拍卖行id"/>
+                <value type="uint64" name="record_id" desc="拍卖单号id"/>
+                <value type="uint64" name="start_time" desc="起始拍卖时间"/>
+                <value type="uint64" name="end_time" desc="结束的时间"/>
+                <value type="uint32" name="template" desc="物品模板"/>
+                <value type="uint32" name="num" desc="数量"/>
+                <value type="uint32" name="price" desc="价格"/>
+            </loop>
+            <value type="loop" looptype="mod_auction_self_record_s2c_list" name="list" desc="拍卖的列表"/>
+        </proto>
+
+        <proto protoid="7" protoname="mod_auction_buy_c2s" type="0" desc="买">
+            <value type="uint32" name="auction_id" desc="拍卖行id"/>
+            <value type="uint64" name="record_id" desc="拍卖单号id"/>
+            <value type="uint32" name="num" desc="数量"/>
+        </proto>
+        <proto protoid="7" protoname="mod_auction_buy_s2c" type="1" desc="买后的消息">
+            <value type="uint8" name="result" desc="0成功 1钱不够 2已售出"/>
+        </proto>
+    </module>
+
+    <module erlname="proto_achievement" modname="mod_achievement" modid="8">
+        <proto protoid="0" protoname="mod_achievement_completed_c2s" type="0" desc="要对应大类的已完成成就列表">
+            <value type="uint8" name="type" desc="成就大类"/>
+        </proto>
+        <proto protoid="0" protoname="mod_achievement_completed_s2c" type="1" desc="返回">
+            <loop name="mod_achievement_completed_s2c_list">
+                <value type="uint32" name="id" desc="id"/>
+            </loop>
+            <value type="uint8" name="type" desc="成就大类"/>
+            <value type="loop" looptype="mod_achievement_completed_s2c_list" name="list" desc="对应某大类的已完成的成就id列表"/>
+        </proto>
+
+        <proto protoid="1" protoname="mod_achievement_points_c2s" type="0" desc="获取成就点数">
+        </proto>
+        <proto protoid="1" protoname="mod_achievement_points_s2c" type="1" desc="返回新的成就点数">
+            <value type="uint32" name="points" desc="成就点数"/>
+        </proto>
+
+        <proto protoid="2" protoname="mod_achievement_complete_s2c" type="1" desc="通知客户端完成了某成就">
+            <loop name="mod_achievement_complete_s2c_list">
+                <value type="uint32" name="id" desc="id"/>
+            </loop>
+            <value type="loop" looptype="mod_achievement_complete_s2c_list" name="list" desc="对应某大类的已完成的成就id列表"/>
+        </proto>
+    </module>
+</all>
+
