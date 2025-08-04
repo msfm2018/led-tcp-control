@@ -1,89 +1,265 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
+
   <meta charset="UTF-8">
-  <title>LED 控制面板</title>
+  <title>温湿度监控</title>
   <style>
+    /* 布局区域 */
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      text-align: center;
-      padding-top: 50px;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: 100vh;
+      font-family: sans-serif;
     }
-    h1 {
-      margin-bottom: 40px;
+
+    @media (max-width: 700px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      #sidebar {
+        flex-direction: row;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
     }
-    button {
-      padding: 15px 30px;
-      font-size: 20px;
-      margin: 10px;
-      border: none;
-      border-radius: 8px;
+
+    /* 侧边栏 */
+#sidebar.collapsed {
+  width: 60px;
+  align-items: center;
+}
+#sidebar.collapsed button span {
+  display: none;
+}
+#sidebar.collapsed button::before {
+  font-size: 18px;
+  display: inline-block;
+  content: attr(data-icon);
+}
+
+    #sidebar {
+      background-color: #f5f5f5;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #sidebar button {
+      padding: 10px;
+      font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s;
+      border: none;
+      background-color: #ddd;
+      border-radius: 4px;
     }
-    .on {
-      background-color: #4CAF50;
-      color: white;
+
+    #sidebar button:hover {
+      background-color: #ccc;
     }
-    .on:hover {
-      background-color: #45a049;
+
+    /* 主内容 */
+    #main {
+      padding: 20px;
+      overflow-y: auto;
     }
-    .off {
-      background-color: #f44336;
-      color: white;
+
+    /* 传感器容器 */
+    #sensors-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      container-type: inline-size;
     }
-    .off:hover {
-      background-color: #da190b;
+
+    .sensor-group {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      background: white;
+      width: 100%;
+      max-width: 260px;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
+
+    .sensor-title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .sensor-value {
+      font-size: 1.3em;
+    }
+
+    @container (max-width: 200px) {
+      .sensor-value {
+        font-size: 1em;
+      }
+    }
+
+    /* 表格样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    /* 阈值设置区 */
+    #threshold label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    #threshold input {
+      padding: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #threshold button {
+      margin-top: 15px;
+      padding: 8px 15px;
+    }
+
     #status {
-      margin-top: 30px;
-      font-size: 18px;
-      color: #333;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- 左边菜单 -->
+  <div id="sidebar">
+<button onclick="toggleSidebar()" data-icon="⏪"><span>折叠菜单</span></button>
+<button onclick="showPage('monitor')" data-icon="📊"><span>实时数据</span></button>
+<button onclick="showPage('threshold')" data-icon="⚙️"><span>阈值设置</span></button>
+  </div>
 
-  <h1>LED 控制面板</h1>
-  <p>设备 ID: <strong>10</strong></p>
+  <!-- 右边主内容 -->
+  <div id="main">
+    <div id="monitor" style="display: block;">
+      <h2>实时温湿度</h2>
+      <div id="sensors-container"></div>
+      <table id="tbl">
+        <thead>
+          <tr><th>设备 ID</th><th>温度 (°C)</th><th>湿度 (%)</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-  <!-- <button class="on" onclick="sendCommand('led_on')">打开 LED</button>
-  <button class="off" onclick="sendCommand('led_off')">关闭 LED</button> -->
-
-  <button id="btn-on" class="on" onclick="sendCommand('led_on')">打开 LED</button>
-<button id="btn-off" class="off" onclick="sendCommand('led_off')">关闭 LED</button>
-
-
-  <p id="status">等待操作...</p>
+    <div id="threshold" style="display: none;">
+      <h2>告警阈值设置</h2>
+      <label>温度上限 (℃): <input id="temp_high" type="number" step="0.1"></label>
+      <label>温度下限 (℃): <input id="temp_low"  type="number" step="0.1"></label>
+      <label>湿度上限 (%):  <input id="hum_high"  type="number" step="1"></label>
+      <label>湿度下限 (%):  <input id="hum_low"   type="number" step="1"></label>
+      <button onclick="load()">读取当前配置</button>
+      <button onclick="save()">保存</button>
+      <div id="status"></div>
+    </div>
+  </div>
 
   <script>
-
-
-    function sendCommand(cmd) {
-      const id = 10;
-
-      fetch('http://127.0.0.1:8999/led/set', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id, cmd })
-      })
-      .then(res => res.json())
-      .then(data => {
-        const status = document.getElementById("status");
-        if (data.code === 0) {
-          status.textContent = `LED 控制成功：${cmd === "led_on" ? "已打开" : "已关闭"}`;
-        } else {
-          status.textContent = `错误：${data.msg}`;
-        }
-      })
-      .catch(err => {
-        document.getElementById('status').textContent = '请求失败：' + err;
-      });
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("collapsed");
+}
+    function showPage(id) {
+      document.getElementById("monitor").style.display = id === "monitor" ? "block" : "none";
+      document.getElementById("threshold").style.display = id === "threshold" ? "block" : "none";
     }
-  </script>
 
+    async function refresh() {
+      try {
+        const res = await fetch("http://127.0.0.1:8999/latest");
+        const list = await res.json(); // [{id, temperature, humidity}]
+
+        const container = document.getElementById("sensors-container");
+        const tbody = document.querySelector("#tbl tbody");
+
+        container.innerHTML = "";
+        tbody.innerHTML = "";
+
+        for (const d of list) {
+          const card = document.createElement("div");
+          card.className = "sensor-group";
+          card.innerHTML = `
+            <div class="sensor-title">设备 ID: ${d.id}</div>
+            <div>🌡 温度: <span class="sensor-value">${parseFloat(d.temperature).toFixed(1)}°C</span></div>
+            <div>💧 湿度: <span class="sensor-value">${parseFloat(d.humidity).toFixed(1)}%</span></div>
+          `;
+          container.appendChild(card);
+
+          tbody.insertAdjacentHTML("beforeend", `
+            <tr>
+              <td>${d.id}</td>
+              <td>${parseFloat(d.temperature).toFixed(1)}</td>
+              <td>${parseFloat(d.humidity).toFixed(1)}</td>
+            </tr>
+          `);
+        }
+      } catch (e) {
+        console.error("无法获取传感器数据", e);
+      }
+    }
+
+    async function load() {
+      document.getElementById('status').textContent = '正在加载...';
+      try {
+        const res = await fetch('http://127.0.0.1:8999/alarm/threshold/get');
+        const data = await res.json();
+        document.getElementById('temp_high').value = data.temp_high;
+        document.getElementById('temp_low').value  = data.temp_low;
+        document.getElementById('hum_high').value  = data.hum_high;
+        document.getElementById('hum_low').value   = data.hum_low;
+        document.getElementById('status').textContent = '加载成功';
+      } catch (e) {
+        document.getElementById('status').textContent = '加载失败';
+      }
+    }
+
+    async function save() {
+      const payload = {
+        temp_high: parseFloat(document.getElementById('temp_high').value),
+        temp_low:  parseFloat(document.getElementById('temp_low').value),
+        hum_high:  parseInt(document.getElementById('hum_high').value),
+        hum_low:   parseInt(document.getElementById('hum_low').value)
+      };
+
+      try {
+        const res = await fetch('http://127.0.0.1:8999/alarm/threshold', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        document.getElementById('status').textContent = res.ok ? '保存成功' : '保存失败';
+      } catch (e) {
+        document.getElementById('status').textContent = '请求错误';
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 3000);
+  </script>
 </body>
 </html>

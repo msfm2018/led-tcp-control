@@ -71,12 +71,26 @@ handle_call(_Request, _From, State) ->
     %                 {noreply, S#state{timeout_count = NewCount}, ?HEART_BREAK_TIME}
     %         end;
 
+    handle_info({turn_off_alarm, Id}, State) ->
+        case ets:lookup(socket_map, Id) of
+            [{Id, Map}] ->
+                Socket1 = maps:get(socket, Map, undefined),
+                gen_tcp:send(Socket1, <<"ledoff\r\n">>),
+                NewMap = maps:put(alarm_light, off, Map),
+                ets:insert(socket_map, {Id, NewMap}),
+                io:format("定时熄灭设备 ~p 的报警灯~n", [Id]);
+            _ ->
+                io:format("报警灯关闭失败：未找到设备 ~p~n", [Id])
+        end,
+        {noreply, State, ?HEART_BREAK_TIME};
+    
+
     handle_info({tcp_closed, _Socket}, State) ->
     %% 正常关闭，停止进程
     {stop, normal, State};
 
    
-    
+
     handle_info(_Any, State) ->
         % io:format("Unexpected message: ~p, State: ~p", [_Any, State]),
         {noreply, State, ?HEART_BREAK_TIME}.
@@ -113,7 +127,7 @@ terminate(Reason, #state{socket=Socket, call_back = CallBack}) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
-    delete_socket_from_map(Socket) ->
+    delete_socket_from_map11111(Socket) ->
         case [Id || {Id, Sock} <- ets:tab2list(socket_map), Sock == Socket] of
             [FoundId] ->
                 io:format("database delete id ~p~n",[FoundId]),
@@ -122,3 +136,18 @@ code_change(_OldVsn, State, _Extra) ->
                 io:format("database not foundid id ~n"),
                 ok
         end.
+
+        delete_socket_from_map(Socket) ->
+            Matches = lists:filter(
+              fun({Id, M}) -> maps:get(socket, M, undefined) == Socket end,
+              ets:tab2list(socket_map)
+            ),
+            case Matches of
+                [{FoundId, _}] ->
+                    io:format("database delete id ~p~n",[FoundId]),
+                    ets:delete(socket_map, FoundId);
+                _ ->
+                    io:format("database not found id~n"),
+                    ok
+            end.
+        

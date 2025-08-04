@@ -16,11 +16,22 @@ start(_StartType, _StartArgs) ->
   %% 建一张 set：Key = Id, Value = #{t => Temperature, h => Humidity}
   ets:new(sensor_latest, [named_table, public, set,{read_concurrency, true},{write_concurrency, true}]),
 
+  % 温湿度告警阈值
+  ets:new(sensor_alarm_config, [named_table, public, set, {read_concurrency, true}, {write_concurrency, true}]),
+  ets:insert(sensor_alarm_config, {thresholds, #{temp_high => 40.0, temp_low => 0.0,
+                                                 hum_high => 70, hum_low => 20}}),
+
+
+                                                 
+
+  % 每个设备对应的 socket
   ets:new(socket_map, [named_table, public, set, {read_concurrency, true}, {write_concurrency, true}]),
 
   % %% 定义Cowboy路由
   Dispatch = cowboy_router:compile([
   {'_', [
+     {"/alarm/threshold", alarm_config_handler, []},%%告警阈值
+     {"/alarm/threshold/get", alarm_get_handler, []},
       {"/s", sensor_ws_handler, []} , %% 留着也行
       {"/test", toppage_h, []} , %% 测试 stm32 http get数据
       {"/led/set", led_set_handler, []},
@@ -29,6 +40,7 @@ start(_StartType, _StartArgs) ->
       {"/gp", sensor_httget_post_handler, []} , 
 
       {"/latest", sensor_http_handler, []}   %% tcp接口使用
+  
   ]}
   ]),
   % %% 启动Cowboy HTTP服务器

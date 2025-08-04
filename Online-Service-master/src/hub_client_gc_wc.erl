@@ -73,19 +73,19 @@ loop(Socket, {timeout, heartbeat}) ->
 
 
   loop(Socket, Data) ->
-  io:format("~p~n",[Data]),
     try
         case proto:handle(Data) of
             % 心跳
             {client_request, mod_player, #mod_player_herat_c2s{}} ->  
-                io:format("heart..........~n"),
+                % io:format("heart..........~n"),
                 gen_tcp:send(Socket, <<"{\"type\":\"ack\"}\r\n">>),
                 gen_server:cast(self(), reset_timeout),
                 ok;
 
             % 注册id
             {client_request, mod_player, #mod_player_login_c2s{id = Id, token = _Token}}->
-                ets:insert(socket_map, {Id, Socket}),
+                % ets:insert(socket_map, {Id, #{socket => Socket, alarm_light => off}}).
+                register_device(Id,Socket),
                 gen_tcp:send(Socket, <<"oklogin\r\n">>),
                 gen_server:cast(self(), reset_timeout),
                 io:format("Device login successful: ID=~p ~p ~n", [Id,Socket]),
@@ -96,6 +96,55 @@ loop(Socket, {timeout, heartbeat}) ->
                 io:format("温湿度: ID=~p, T=~p, H=~p~n", [Id, T, H]),
                 New = #{id => Id, temperature => T, humidity => H},
                 ets:insert(sensor_latest, {Id, New}),
+
+ %% 读取阈值配置
+case ets:lookup(sensor_alarm_config, thresholds) of
+    [{thresholds, Conf}] ->
+
+        %% 温湿度值为二进制字符串，需转为 float
+        FloatT = binary_to_float(T),
+        FloatH = binary_to_float(H),
+
+        TempHigh = maps:get(temp_high, Conf, 100.0),
+        TempLow  = maps:get(temp_low,  Conf, -100.0),
+        HumHigh  = maps:get(hum_high,  Conf, 100),
+        HumLow   = maps:get(hum_low,   Conf, 0),
+      io:format("~p~n",[{FloatT,FloatH,TempHigh,HumHigh}]),
+        %% 检查是否超限
+    IsTempAlarm = (FloatT > TempHigh) orelse (FloatT < TempLow),
+    IsHumAlarm  = (FloatH > HumHigh)  orelse (FloatH < HumLow),
+        AlarmNeeded = IsTempAlarm orelse IsHumAlarm,
+        case ets:lookup(socket_map, Id) of
+            [{Id, Map}] ->
+                Socket = maps:get(socket, Map, undefined),
+                PrevStatus = maps:get(alarm_light, Map, off),
+                CurrStatus = if AlarmNeeded -> on; true -> off end,
+        
+                case PrevStatus =/= CurrStatus of
+                    true ->
+                        %% 状态改变才发送指令，并更新ETS记录
+                        Command = case CurrStatus of
+                                     on  -> erlang:send_after(5000, self(), {turn_off_alarm, Id}), <<"ledon\r\n">>;
+                                     off -> <<"ledoff\r\n">>
+                                  end,
+                        gen_tcp:send(Socket, Command),
+                        io:format("状态变更: ~p -> ~p, 发送指令 ~p~n", [PrevStatus, CurrStatus, Command]),
+                        NewMap = maps:put(alarm_light, CurrStatus, Map),
+                        ets:insert(socket_map, {Id, NewMap});
+                    false ->
+                        %% 状态没变，不重复发指令
+                        ok
+                end;
+            _ ->
+                io:format("未找到设备 ~p 的 socket~n", [Id])
+        end;
+        
+        
+    _ ->
+        io:format("未找到报警阈值配置，跳过检测~n")
+end,
+
+
                 gen_server:cast(self(), reset_timeout),
                 ok;
 
@@ -111,12 +160,27 @@ loop(Socket, {timeout, heartbeat}) ->
         % _ ->
             % receive_data(Socket, <<"raw">>, Data)
     end;
-
+    loop(Socket, {turn_off_alarm, Id}) ->
+        io:format("定时熄灭设4444444444444444备 ~p 的报警灯~n", [Id]),
+        case ets:lookup(socket_map, Id) of
+            [{Id, Map}] ->
+                Socket1 = maps:get(socket, Map, undefined),
+                gen_tcp:send(Socket1, <<"ledoff\r\n">>),
+                NewMap = maps:put(alarm_light, off, Map),
+                ets:insert(socket_map, {Id, NewMap}),
+                io:format("定时熄灭设备 ~p 的报警灯~n", [Id]);
+            _ ->
+                io:format("报警灯关闭失败：未找到设备 ~p~n", [Id])
+        end,
+        ok;
+    
     loop(_Socket, UnexpectedMsg) ->
         logger:warning("Received unexpected message in loop: ~p", [UnexpectedMsg]),
         ok.
 
-
+    register_device(DeviceId, Socket) ->
+        ets:insert(socket_map, {DeviceId, #{socket => Socket, alarm_light => off}}).
+          
 %%%-----------------------------------------------------------------
 %%% 尚未实现的其它业务类型
 %%%-----------------------------------------------------------------
