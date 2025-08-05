@@ -1,3 +1,8 @@
 wifi     对角线 3.3和负   3.3对的 接 A2  负对的接 A3  剩下的中间一个接 c13
 
 温湿度 中间data 接 a0                                            
+
+
+
+
+stm32  温室检测器模块  data -a0 vcc-3,3 gnd-gnd  esp-01s： rx-a2 3.3-3v3  rst-c13  tx-a3 gnd-g     a5--led管线  led管线 另一脚接3.3   根据描述 画pcb线路图 拿去打pcb板子
