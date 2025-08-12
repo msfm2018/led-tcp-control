@@ -77,7 +77,6 @@ loop(Socket, {timeout, heartbeat}) ->
         case proto:handle(Data) of
             % 心跳
             {client_request, mod_player, #mod_player_herat_c2s{}} ->  
-                % io:format("heart..........~n"),
                 gen_tcp:send(Socket, <<"{\"type\":\"ack\"}\r\n">>),
                 gen_server:cast(self(), reset_timeout),
                 ok;

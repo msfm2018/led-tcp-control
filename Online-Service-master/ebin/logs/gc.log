@@ -1,0 +1,329 @@
+=CRASH REPORT==== 12-Aug-2025::20:58:39.614000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.202.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.201.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',
+                       path => <<"/alarm/threshold/get">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49196},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 1,method => <<"GET">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-ch-ua">> =>
+                                 <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,
+                             <<"sec-ch-ua-mobile">> => <<"?0">>,
+                             <<"sec-ch-ua-platform">> => <<"\"Windows\"">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 0,has_body => false,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_sent_resp => true}
+      in function  alarm_get_handler:init/2 (alarm_get_handler.erl:29)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.201.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.201.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 1598
+    stack_size: 29
+    reductions: 703
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::20:58:39.626000 ===
+Ranch listener http, connection process <0.201.0>, stream 1 had its request process <0.202.0> exit with reason {{badmatch,#{pid => <0.201.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold/get">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49196},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 1,method => <<"GET">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"connection">> => <<"keep-alive">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-ch-ua">> => <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,<<"sec-ch-ua-mobile">> => <<"?0">>,<<"sec-ch-ua-platform">> => <<"\"Windows\"">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 0,has_body => false,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_sent_resp => true}},[{alarm_get_handler,init,2,[{file,"alarm_get_handler.erl"},{line,29}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
+=CRASH REPORT==== 12-Aug-2025::20:59:07.935000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.204.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.203.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',path => <<"/alarm/threshold">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49209},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 1,method => <<"OPTIONS">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"access-control-request-headers">> =>
+                                 <<"content-type">>,
+                             <<"access-control-request-method">> => <<"POST">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 0,has_body => false,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_sent_resp => true}
+      in function  alarm_config_handler:init/2 (alarm_config_handler.erl:9)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.203.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.203.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 1598
+    stack_size: 29
+    reductions: 325
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::20:59:07.940000 ===
+Ranch listener http, connection process <0.203.0>, stream 1 had its request process <0.204.0> exit with reason {{badmatch,#{pid => <0.203.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49209},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 1,method => <<"OPTIONS">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"access-control-request-headers">> => <<"content-type">>,<<"access-control-request-method">> => <<"POST">>,<<"connection">> => <<"keep-alive">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 0,has_body => false,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_sent_resp => true}},[{alarm_config_handler,init,2,[{file,"alarm_config_handler.erl"},{line,9}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
+=CRASH REPORT==== 12-Aug-2025::20:59:07.941000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.205.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.203.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',path => <<"/alarm/threshold">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49209},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 2,method => <<"POST">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"content-length">> => <<"56">>,
+                             <<"content-type">> => <<"application/json">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-ch-ua">> =>
+                                 <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,
+                             <<"sec-ch-ua-mobile">> => <<"?0">>,
+                             <<"sec-ch-ua-platform">> => <<"\"Windows\"">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 56,has_body => true,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_read_body => true,has_sent_resp => true}
+      in function  alarm_config_handler:init/2 (alarm_config_handler.erl:27)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.203.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.203.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 987
+    stack_size: 29
+    reductions: 369
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::20:59:07.943000 ===
+Ranch listener http, connection process <0.203.0>, stream 2 had its request process <0.205.0> exit with reason {{badmatch,#{pid => <0.203.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49209},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 2,method => <<"POST">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"connection">> => <<"keep-alive">>,<<"content-length">> => <<"56">>,<<"content-type">> => <<"application/json">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-ch-ua">> => <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,<<"sec-ch-ua-mobile">> => <<"?0">>,<<"sec-ch-ua-platform">> => <<"\"Windows\"">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 56,has_body => true,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_read_body => true,has_sent_resp => true}},[{alarm_config_handler,init,2,[{file,"alarm_config_handler.erl"},{line,27}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
+=CRASH REPORT==== 12-Aug-2025::21:02:31.248000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.220.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.207.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',
+                       path => <<"/alarm/threshold/get">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49312},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 13,method => <<"GET">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-ch-ua">> =>
+                                 <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,
+                             <<"sec-ch-ua-mobile">> => <<"?0">>,
+                             <<"sec-ch-ua-platform">> => <<"\"Windows\"">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 0,has_body => false,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_sent_resp => true}
+      in function  alarm_get_handler:init/2 (alarm_get_handler.erl:29)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.207.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.207.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 987
+    stack_size: 29
+    reductions: 291
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::21:02:31.250000 ===
+Ranch listener http, connection process <0.207.0>, stream 13 had its request process <0.220.0> exit with reason {{badmatch,#{pid => <0.207.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold/get">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49312},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 13,method => <<"GET">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"connection">> => <<"keep-alive">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-ch-ua">> => <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,<<"sec-ch-ua-mobile">> => <<"?0">>,<<"sec-ch-ua-platform">> => <<"\"Windows\"">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 0,has_body => false,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_sent_resp => true}},[{alarm_get_handler,init,2,[{file,"alarm_get_handler.erl"},{line,29}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
+=CRASH REPORT==== 12-Aug-2025::21:03:24.096000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.241.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.207.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',
+                       path => <<"/alarm/threshold/get">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49312},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 33,method => <<"GET">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-ch-ua">> =>
+                                 <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,
+                             <<"sec-ch-ua-mobile">> => <<"?0">>,
+                             <<"sec-ch-ua-platform">> => <<"\"Windows\"">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 0,has_body => false,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_sent_resp => true}
+      in function  alarm_get_handler:init/2 (alarm_get_handler.erl:29)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.207.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.207.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 987
+    stack_size: 29
+    reductions: 291
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::21:03:24.097000 ===
+Ranch listener http, connection process <0.207.0>, stream 33 had its request process <0.241.0> exit with reason {{badmatch,#{pid => <0.207.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold/get">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49312},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 33,method => <<"GET">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"connection">> => <<"keep-alive">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-ch-ua">> => <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,<<"sec-ch-ua-mobile">> => <<"?0">>,<<"sec-ch-ua-platform">> => <<"\"Windows\"">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 0,has_body => false,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_sent_resp => true}},[{alarm_get_handler,init,2,[{file,"alarm_get_handler.erl"},{line,29}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
+=CRASH REPORT==== 12-Aug-2025::21:04:23.658000 ===
+  crasher:
+    initial call: cowboy_stream_h:request_process/3
+    pid: <0.264.0>
+    registered_name: []
+    exception error: no match of right hand side value 
+                     #{pid => <0.207.0>,port => 8999,scheme => <<"http">>,
+                       version => 'HTTP/1.1',
+                       path => <<"/alarm/threshold/get">>,
+                       host => <<"127.0.0.1">>,
+                       peer => {{127,0,0,1},49312},
+                       bindings => #{},cert => undefined,
+                       host_info => undefined,path_info => undefined,
+                       streamid => 56,method => <<"GET">>,
+                       headers =>
+                           #{<<"accept">> => <<"*/*">>,
+                             <<"accept-encoding">> =>
+                                 <<"gzip, deflate, br, zstd">>,
+                             <<"accept-language">> => <<"zh-CN,zh;q=0.9">>,
+                             <<"connection">> => <<"keep-alive">>,
+                             <<"host">> => <<"127.0.0.1:8999">>,
+                             <<"origin">> => <<"http://127.0.0.1">>,
+                             <<"referer">> => <<"http://127.0.0.1/">>,
+                             <<"sec-ch-ua">> =>
+                                 <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,
+                             <<"sec-ch-ua-mobile">> => <<"?0">>,
+                             <<"sec-ch-ua-platform">> => <<"\"Windows\"">>,
+                             <<"sec-fetch-dest">> => <<"empty">>,
+                             <<"sec-fetch-mode">> => <<"cors">>,
+                             <<"sec-fetch-site">> => <<"same-site">>,
+                             <<"user-agent">> =>
+                                 <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},
+                       body_length => 0,has_body => false,qs => <<>>,
+                       ref => http,
+                       sock => {{127,0,0,1},8999},
+                       has_sent_resp => true}
+      in function  alarm_get_handler:init/2 (alarm_get_handler.erl:29)
+      in call from cowboy_handler:execute/2 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_handler.erl:37)
+      in call from cowboy_stream_h:execute/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:310)
+      in call from cowboy_stream_h:request_process/3 (c:/Users/Administrator/Downloads/pzApp-3.1 (1)/pzApp-3.1/服务端文件/my_pz_server/_build/default/lib/cowboy/src/cowboy_stream_h.erl:299)
+    ancestors: [<0.207.0>,<0.130.0>,<0.129.0>,ranch_sup,<0.122.0>]
+    message_queue_len: 0
+    messages: []
+    links: [<0.207.0>]
+    dictionary: []
+    trap_exit: false
+    status: running
+    heap_size: 987
+    stack_size: 29
+    reductions: 291
+  neighbours:
+
+=ERROR REPORT==== 12-Aug-2025::21:04:23.659000 ===
+Ranch listener http, connection process <0.207.0>, stream 56 had its request process <0.264.0> exit with reason {{badmatch,#{pid => <0.207.0>,port => 8999,scheme => <<"http">>,version => 'HTTP/1.1',path => <<"/alarm/threshold/get">>,host => <<"127.0.0.1">>,peer => {{127,0,0,1},49312},bindings => #{},cert => undefined,host_info => undefined,path_info => undefined,streamid => 56,method => <<"GET">>,headers => #{<<"accept">> => <<"*/*">>,<<"accept-encoding">> => <<"gzip, deflate, br, zstd">>,<<"accept-language">> => <<"zh-CN,zh;q=0.9">>,<<"connection">> => <<"keep-alive">>,<<"host">> => <<"127.0.0.1:8999">>,<<"origin">> => <<"http://127.0.0.1">>,<<"referer">> => <<"http://127.0.0.1/">>,<<"sec-ch-ua">> => <<"\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"">>,<<"sec-ch-ua-mobile">> => <<"?0">>,<<"sec-ch-ua-platform">> => <<"\"Windows\"">>,<<"sec-fetch-dest">> => <<"empty">>,<<"sec-fetch-mode">> => <<"cors">>,<<"sec-fetch-site">> => <<"same-site">>,<<"user-agent">> => <<"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36">>},body_length => 0,has_body => false,qs => <<>>,ref => http,sock => {{127,0,0,1},8999},has_sent_resp => true}},[{alarm_get_handler,init,2,[{file,"alarm_get_handler.erl"},{line,29}]},{cowboy_handler,execute,2,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,104,97,110,100,108,101,114,46,101,114,108]},{line,37}]},{cowboy_stream_h,execute,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,310}]},{cowboy_stream_h,request_process,3,[{file,[99,58,47,85,115,101,114,115,47,65,100,109,105,110,105,115,116,114,97,116,111,114,47,68,111,119,110,108,111,97,100,115,47,112,122,65,112,112,45,51,46,49,32,40,49,41,47,112,122,65,112,112,45,51,46,49,47,26381,21153,31471,25991,20214,47,109,121,95,112,122,95,115,101,114,118,101,114,47,95,98,117,105,108,100,47,100,101,102,97,117,108,116,47,108,105,98,47,99,111,119,98,111,121,47,115,114,99,47,99,111,119,98,111,121,95,115,116,114,101,97,109,95,104,46,101,114,108]},{line,299}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,333}]}]}
+
