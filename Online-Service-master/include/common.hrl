@@ -18,6 +18,17 @@
 -include("error.hrl").
 -include("server.hrl").
 
+% -record(mnesia_config, {thresholds}).
+
+%% 历史温湿度记录
+-record(sensor_history, {
+    id,          % 设备 ID
+    timestamp,   % 时间戳（秒）
+    temperature, % 温度
+    humidity     % 湿度
+}).
+
+
 -define(ENV_ETS, my_erlang_env_ets).
 -define(CONF_ETS, my_conf_ets).
 

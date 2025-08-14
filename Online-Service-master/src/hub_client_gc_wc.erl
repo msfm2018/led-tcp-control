@@ -96,6 +96,16 @@ loop(Socket, {timeout, heartbeat}) ->
                 New = #{id => Id, temperature => T, humidity => H},
                 ets:insert(sensor_latest, {Id, New}),
 
+                % 存历史数据到 Mnesia
+                HistoryRec = #sensor_history{
+                id = Id,
+                timestamp = os:system_time(second),
+                temperature = T,
+                humidity = H
+                },
+                ok = mnesia:dirty_write(HistoryRec),
+
+
  %% 读取阈值配置
 case ets:lookup(sensor_alarm_config, thresholds) of
     [{thresholds, Conf}] ->
